@@ -23,8 +23,7 @@ exports.policy = function(chain, target) {
     var rule = {
         chain: chain,
         action: '-P',
-        target: target,
-        sudo: true
+        target: target
     };
 
     newRule(rule);
@@ -88,6 +87,11 @@ function iptablesArgs (rule) {
     var args = [];
 
     if (!rule.chain) rule.chain = 'INPUT';
+
+    if (rule.policy) {
+        args = args.concat([rule.action, rule.chain, rule.target]);
+        return args;
+    }
 
     if (rule.chain) args = args.concat([rule.action, rule.chain]);
     if (rule.protocol) args = args.concat(["-p", rule.protocol]);
