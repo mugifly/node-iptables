@@ -99,7 +99,7 @@ function iptablesArgs (rule) {
     if (rule.out) args = args.concat(["-o", rule.out]);
     if (rule.target) args = args.concat(["-j", rule.target]);
     if (rule.list) args = args.concat(["-n", "-v"]);
-    if (rule.tcpFlags) args = args.concat(['--tcp-flags', rule.tcpFlags.mask, rule.tcpFlags.comp]);
+    if (rule.tcpFlags) args = args.concat(['-m tcp', '--tcp-flags', rule.tcpFlags.mask, rule.tcpFlags.comp]);
     if (rule.state) args = args.concat(["-m", "state", "--state", rule.state]);
 
     return args;
