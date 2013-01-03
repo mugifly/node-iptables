@@ -88,7 +88,7 @@ function iptablesArgs (rule) {
 
     if (!rule.chain) rule.chain = 'INPUT';
 
-    if (rule.policy) {
+    if (rule.action === '-P') {
         args = args.concat([rule.action, rule.chain, rule.target]);
         return args;
     }
