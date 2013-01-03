@@ -5,19 +5,30 @@ exports.allow = function (rule) {
     rule.target = 'ACCEPT';
     if (!rule.action) rule.action = '-A';
     newRule(rule);
-}
+};
 
 exports.drop = function (rule) {
     rule.target = 'DROP';
     if (!rule.action) rule.action = '-A';
     newRule(rule);
-}
+};
 
 exports.reject = function (rule) {
     rule.target = 'REJECT';
     if (!rule.action) rule.action = '-A';
     newRule(rule);
-}
+};
+
+exports.policy = function(chain, target) {
+    var rule = {
+        chain: chain,
+        action: '-P',
+        target: target,
+        sudo: true
+    };
+
+    newRule(rule);
+};
 
 exports.list = function(chain, cb) {
     var rule = {
@@ -51,8 +62,8 @@ exports.list = function(chain, cb) {
         })
         .join(function (rules) {
             cb(rules);
-        })
-}
+        });
+};
 
 exports.newRule = newRule;
 exports.deleteRule = deleteRule;
@@ -88,6 +99,8 @@ function iptablesArgs (rule) {
     if (rule.out) args = args.concat(["-o", rule.out]);
     if (rule.target) args = args.concat(["-j", rule.target]);
     if (rule.list) args = args.concat(["-n", "-v"]);
+    if (rule.tcpFlags) args = args.concat(['--tcp-flags', rule.tcpFlags.mask, rule.tcpFlags.comp]);
+    if (rule.state) args = args.concat(["-m", "state", "--state", rule.state]);
 
     return args;
 }
