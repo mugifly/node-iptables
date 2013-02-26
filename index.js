@@ -45,7 +45,25 @@ exports.list = function(chain, callback) {
             return;
         }
 
-        callback(err, _.lines(output.stdout));
+        var lines = _.lines(output.stdout).splice(2);
+
+        callback(err, _.map(lines, function(line) {
+            var fields = line.trim().split(/\s+/, 9);
+            return {
+                parsed: {
+                    packets: fields[0],
+                    bytes: fields[1],
+                    target: fields[2],
+                    protocol: fields[3],
+                    opt: fields[4],
+                    in: fields[5],
+                    out: fields[6],
+                    src: fields[7],
+                    dst: fields[8]
+                },
+                raw: line.trim()
+            };
+        }));
     });
 };
 
