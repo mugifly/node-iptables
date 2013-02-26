@@ -1,6 +1,7 @@
 var exec = require('child_process').exec;
 var _ = require('underscore');
 _.str = require('underscore.string');
+_.mixin(_.str.exports());
 
 exports.allow = function (rule, callback) {
     rule.target = 'ACCEPT';
