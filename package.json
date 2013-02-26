@@ -19,7 +19,8 @@
         "twitter" : "http://twitter.com/pkrumins"
     },
     "dependencies" : {
-        "lazy" : ">= 1.0.6"
+        "underscore" : "*",
+        "underscore.string" : "*"
     },
     "license" : "MIT",
     "engine" : {

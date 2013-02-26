@@ -1,5 +1,6 @@
 var exec = require('child_process').exec;
-var lazy = require('lazy');
+var _ = require('underscore');
+_.str = require('underscore.string');
 
 exports.allow = function (rule, callback) {
     rule.target = 'ACCEPT';
