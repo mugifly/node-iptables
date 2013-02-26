@@ -15,12 +15,18 @@ Here is an example usage:
         src : '10.1.1.5',
         dport : 34567,
         sudo : true
+    }, function(err) {
+        if (err) {
+            // do something here
+        }
     });
 
     iptables.drop({
         protocol : 'tcp',
         dport : 34567,
         sudo : true
+    }, function(err) {
+        // do something if err
     });
 
 This allows connections to port 34567 from 10.1.1.5 and drops connections from
