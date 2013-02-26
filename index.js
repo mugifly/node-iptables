@@ -48,6 +48,11 @@ exports.list = function(chain, callback) {
         var lines = _.lines(output.stdout).splice(2);
 
         callback(err, _.map(lines, function(line) {
+
+            if (line == '') {
+                return null;
+            }
+
             var fields = line.trim().split(/\s+/, 9);
             return {
                 parsed: {
