@@ -37,32 +37,34 @@ exports.list = function(chain, cb) {
         sudo : true
     };
 
-    lazy(iptables(rule).stdout)
-        .lines
-        .map(String)
-        .skip(2)
-        .map(function (line) {
-            // packets, bytes, target, pro, opt, in, out, src, dst, opts
+    var cmd = iptables(rule);
+    var result = '';
+    cmd.stdout.on('data', function (data) {
+        result += data.toString();
+    })
+    cmd.on('close', function (code) {
+        var rules = [];
+        var lines = result.split(/\n/);
+        lines.forEach(function (line, i) {
+            if (i <= 1 || line.match(/^\S*$/)) return;
             var fields = line.trim().split(/\s+/, 11);
-            return {
-                parsed : {
-                    packets : fields[0],
-                    bytes : fields[1],
-                    target : fields[2],
-                    protocol : fields[3],
-                    opt : fields[4],
-                    in : fields[5],
-                    out : fields[6],
-                    src : fields[7],
-                    dst : fields[8],
-                    mac : fields[10]
-                },
-                raw : line.trim()
+            var parsed = {
+                packets : fields[0],
+                bytes : fields[1],
+                target : fields[2],
+                protocol : fields[3],
+                opt : fields[4],
+                in : fields[5],
+                out : fields[6],
+                src : fields[7],
+                dst : fields[8],
+                mac : fields[10]
             };
-        })
-        .join(function (rules) {
-            cb(rules);
+            rules.push(parsed);
         });
+        cb(rules);
+    });
+
 };
 
 exports.newRule = newRule;
